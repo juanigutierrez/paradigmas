@@ -9,13 +9,13 @@ import Quality
 data Region = Reg [City] [Link] [Tunel]
 
 newR :: [City] -> [Link] -> [Tunel] -> Region
-newR city links tuneles= Reg city links tuneles
+newR city links tuneles = Reg city links tuneles
 
 foundR :: Region -> City -> Region -- agrega una nueva ciudad a la región
-foundR (Reg citys links tuneles) city=Reg (city:citys) links tuneles
+foundR (Reg citys links tuneles) city = Reg (city:citys) links tuneles
 
 linkR :: Region -> City -> City -> Quality -> Region -- enlaza dos ciudades de la región con un enlace de la calidad indicada
-linkR (Reg citys links tuneles) cityA cityB quality= Reg citys (newL cityA cityB quality:links) tuneles
+linkR (Reg citys links tuneles) cityA cityB quality = Reg citys (newL cityA cityB quality:links) tuneles
 
 --tunelR :: Region -> [ City ] -> Region -- genera una comunicación entre dos ciudades distintas de la región
 --este lo tengo q hacer
