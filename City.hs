@@ -1,4 +1,5 @@
-module City ( City, newC, nameC, distanceC )
+--ELIMINAR UBI DEL PARENTESIS MODULE
+module City ( City, newC, nameC, distanceC, ubi)
    where
 
 import Point 
