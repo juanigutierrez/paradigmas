@@ -10,9 +10,11 @@ data Region = Reg [City] [Link] [Tunel] deriving (Eq,Show)
 
 newR :: [City] -> [Link] -> [Tunel] -> Region
 newR city links tunnels = Reg city links tunnels
+--entonces esto esta mal. ¿Cómo que no recibe parametros? 
 
 foundR :: Region -> City -> Region -- agrega una nueva ciudad a la región
 foundR (Reg citys links tunnels) city = Reg (city:citys) links tunnels
+   --revisar si ya esta incluida
 
 linkR :: Region -> City -> City -> Quality -> Region -- enlaza dos ciudades de la región con un enlace de la calidad indicada.
 linkR (Reg citys links tunnels) cityA cityB quality = Reg citys ((newL cityA cityB quality):links) tunnels
