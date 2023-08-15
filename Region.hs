@@ -18,7 +18,11 @@ linkR :: Region -> City -> City -> Quality -> Region -- enlaza dos ciudades de l
 linkR (Reg citys links tunnels) cityA cityB quality = Reg citys ((newL cityA cityB quality):links) tunnels
 
 --tunelR :: Region -> [ City ] -> Region -- genera una comunicación entre dos ciudades distintas de la región
---este lo tengo q hacer
+
+--PREGUNTAR: si quieren que generemos un tunel entre dos ciudades, lo que tenemos que hacer es generar un link y meterlo en el tunel. 
+--pero para poder usar linkR, necesitamos la calidad de la conexión.
+
+--tunelR Reg(citys links tunels) ccity = Reg citys links ((newT ))
 
 connectedR :: Region -> City -> City -> Bool -- indica si estas dos ciudades estan conectadas por un tunel
 connectedR (Reg citys links tuneles) cityA cityB = length([tunel | tunel <- tuneles,connectsT cityA cityB tunel])>0
