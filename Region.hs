@@ -25,7 +25,10 @@ connectedR (Reg citys links tuneles) cityA cityB |length([tunel | tunel <- tunel
                                                                 |otherwise = False
 
 
-{-linkedR :: Region -> City -> City -> Bool -- indica si estas dos ciudades estan enlazadas
+linkedR :: Region -> City -> City -> Bool -- indica si estas dos ciudades estan enlazadas
+linkedR (Reg citys links tuneles) cityA cityB | length([link | link <- links,linksL cityA cityB tunel])>0 =True
+                                                                |otherwise = False
+                                                                
 delayR :: Region -> City -> City -> Float -- dadas dos ciudades conectadas, indica la demora
 availableCapacityForR :: Region -> City -> City -> Int -- indica la capacidad disponible entre dos ciudades-}
 
