@@ -8,7 +8,7 @@ data Tunel = Tun [Link] deriving (Eq, Show)
 newT :: [Link] -> Tunel
 newT links = Tun links
 
-connectsT :: City -> City -> Tunel -> Bool -- inidca si este tunel conceta estas dos ciudades distintas
+connectsT :: City -> City -> Tunel -> Bool -- inidca si este tunel conecta estas dos ciudades distintas
 connectsT city1 city2 (Tun links)= length [x | x <- links, linksL city1 city2 x] >= 1
 
 usesT :: Link -> Tunel -> Bool  -- indica si este tunel atraviesa ese link

@@ -8,9 +8,8 @@ import Quality
 
 data Region = Reg [City] [Link] [Tunel] deriving (Eq,Show)
 
-newR :: [City] -> [Link] -> [Tunel] -> Region
-newR city links tunnels = Reg city links tunnels
---entonces esto esta mal. ¿Cómo que no recibe parametros? 
+newR :: Region
+newR = Reg [] [] []
 
 foundR :: Region -> City -> Region -- agrega una nueva ciudad a la región
 foundR (Reg citys links tunnels) city = Reg (city:citys) links tunnels
@@ -19,7 +18,7 @@ foundR (Reg citys links tunnels) city = Reg (city:citys) links tunnels
 linkR :: Region -> City -> City -> Quality -> Region -- enlaza dos ciudades de la región con un enlace de la calidad indicada.
 linkR (Reg citys links tunnels) cityA cityB quality = Reg citys ((newL cityA cityB quality):links) tunnels
 
---tunelR :: Region -> [ City ] -> Region -- genera una comunicación entre dos ciudades distintas de la región
+tunelR :: Region -> [ City ] -> Region -- genera una comunicación entre dos ciudades distintas de la región
 
    --PREGUNTAR: si quieren que generemos un tunel entre dos ciudades, lo que tenemos que hacer es generar un link y meterlo en el tunel. 
    --pero para poder usar linkR, necesitamos la calidad de la conexión.
@@ -27,7 +26,7 @@ linkR (Reg citys links tunnels) cityA cityB quality = Reg citys ((newL cityA cit
 --tunelR Reg(citys links tunels) ccity = Reg citys links ((newT ))
 
 connectedR :: Region -> City -> City -> Bool -- indica si estas dos ciudades estan conectadas por un tunel
-connectedR (Reg citys links tuneles) cityA cityB = length([tunel | tunel <- tuneles,connectsT cityA cityB tunel])>0
+connectedR (Reg citys links tuneles) cityA cityB = length([tunel | tunel <- tuneles,connectsT cityA cityB tunel]) > 0
 
 
 linkedR :: Region -> City -> City -> Bool -- indica si estas dos ciudades estan enlazadas
