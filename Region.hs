@@ -30,17 +30,16 @@ tunelR (Reg citys links tunnels)
 citiesR :: [Link] -> [City]
 citiesR (x:xs) = (namesL x) ++ citiesR xs
 
-notrepeted :: [City] -> City
-notrepeted [] = error "No hay ninguna ciudad unica en la lista."
-notrepeted (x:xs) | x `notElem`xs = x
-                  | otherwise notrepeted xs
+--notrepeted :: [City] -> City
+--notrepeted [] = error "No hay ninguna ciudad unica en la lista."
+--notrepeted (x:xs) | x `notElem`xs = x
+--                  | otherwise notrepeted xs
 
-firstlink :: [Link] -> City -> Link
-firstlink links (notrepeted(citiesR links)) = connectedR links
+--firstlink :: [Link] -> City -> Link
+--firstlink links (notrepeted(citiesR links)) = connectedR links
 
 connectedR :: Region -> City -> City -> Bool -- indica si estas dos ciudades estan conectadas por un tunel
 connectedR (Reg _ _ tuneles) cityA cityB = length ([tunel | tunel <- tuneles,connectsT cityA cityB tunel]) > 0
-
 
 linkedR :: Region -> City -> City -> Bool -- indica si estas dos ciudades estan enlazadas
 linkedR (Reg _ links _) cityA cityB = length([link | link <- links, linksL cityA cityB link]) > 0 
