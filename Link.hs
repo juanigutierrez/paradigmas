@@ -19,7 +19,7 @@ linksL city1 city2 link = connectsL city1 link && connectsL city2 link
 capacityL :: Link -> Int
 capacityL (Lin _ _ quality) = capacityQ quality
 delayL :: Link -> Float     -- la demora que sufre una conexion en este canal
-delayL  (Lin _ _ quality)  = delayQ quality
+delayL  (Lin cityA cityB quality)  = (distanceC cityA cityB) / (delayQ quality)
 
 --AUXILIAR
 namesL :: Link -> [City]
