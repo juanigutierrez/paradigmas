@@ -1,11 +1,12 @@
 --SOLUCIONAR:
     --NO SEDEBERÍA PODER HACER UNA CONEXIÓN ENTRE LA MISMA CIUDAD
 
-module Link ( Link, newL, linksL, connectsL, capacityL, delayL )
+module Link ( Link, newL, linksL, connectsL, capacityL, delayL, namesL)
    where
 
 import City
 import Quality
+import Distribution.Verbosity (verbose)
 
 data Link = Lin City City Quality deriving (Eq, Show)
 
@@ -19,3 +20,7 @@ capacityL :: Link -> Int
 capacityL (Lin _ _ quality) = capacityQ quality
 delayL :: Link -> Float     -- la demora que sufre una conexion en este canal
 delayL  (Lin _ _ quality)  = delayQ quality
+
+--AUXILIAR
+namesL :: Link -> [City]
+namesL (Lin cityA cityB _) = [cityA,cityB]
