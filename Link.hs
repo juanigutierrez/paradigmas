@@ -6,6 +6,7 @@ module Link ( Link, newL, linksL, connectsL, capacityL, delayL )
 
 import City
 import Quality
+import Point (difP)
 
 data Link = Lin City City Quality deriving (Eq, Show)
 
@@ -18,4 +19,4 @@ linksL city1 city2 link = connectsL city1 link && connectsL city2 link
 capacityL :: Link -> Int
 capacityL (Lin _ _ quality) = capacityQ quality
 delayL :: Link -> Float     -- la demora que sufre una conexion en este canal
-delayL  (Lin _ _ quality)  = delayQ quality
+delayL  (Lin cityA cityB quality)  =  (delayQ quality) / (difP (ubi cityA) (ubi cityB))
