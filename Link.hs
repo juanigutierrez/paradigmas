@@ -11,7 +11,9 @@ import Distribution.Verbosity (verbose)
 data Link = Lin City City Quality deriving (Eq, Show)
 
 newL :: City -> City -> Quality -> Link -- genera un link entre dos ciudades distintas
-newL city1 city2 quality = Lin city1 city2 quality
+newL city1 city2 quality 
+    |city1 == city2 = error "No se puede hacer un link entre la misma ciudad."
+    |otherwise = Lin city1 city2 quality
 connectsL :: City -> Link -> Bool   -- indica si esta ciudad es parte de este link
 connectsL city (Lin city1 city2 _) = (city == city1) || (city == city2)
 linksL :: City -> City -> Link -> Bool -- indica si estas dos ciudades distintas estan conectadas mediante este link

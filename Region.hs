@@ -5,7 +5,6 @@ import Link
 import Tunel
 import Point
 import Quality
-import System.Win32 (xBUTTON1)
 
 data Region = Reg [City] [Link] [Tunel] deriving (Eq,Show)
 
@@ -35,7 +34,6 @@ tunelR (Reg cities links tunnels) tunelcities
 connectionL :: [City] -> [Link] -> [Link]
 connectionL cities links = [link | cityA <- cities, cityB <- cities, cityA /= cityB , link <- links, linksL cityA cityB link]
 --no se si esta función me va a repetir los links.
---revisar/preguntar largo de la función.
 
 connectedR :: Region -> City -> City -> Bool -- indica si estas dos ciudades estan conectadas por un tunel
 connectedR (Reg _ _ tuneles) cityA cityB = not (null ([tunel | tunel <- tuneles,connectsT cityA cityB tunel]))
