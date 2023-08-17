@@ -6,7 +6,6 @@ module Link ( Link, newL, linksL, connectsL, capacityL, delayL)
 
 import City
 import Quality
-import Distribution.Verbosity (verbose)
 
 data Link = Lin City City Quality deriving (Eq, Show)
 

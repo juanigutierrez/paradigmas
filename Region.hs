@@ -26,14 +26,19 @@ tunelR :: Region -> [ City ] -> Region -- genera una comunicación entre dos ciu
    --lista de ciudades ingresadas debe ser parte de la región.
    --las ciudades que se desean conectar deben tener links ya ingresados.
    --tengo que ver que no se puedan meter links en mas tuneles que su capacidad permitida.
+   
 tunelR (Reg cities links tunnels) tunelcities
    | not (all (`elem` tunelcities) cities) = error "Una ciudad ingresada no forma parte de la region."
    | length (connectionL tunelcities links) < (length tunelcities - 1) = error "No hay suficientes links en la región para conectar las ciudades."
    | otherwise = Reg cities links [newT (connectionL tunelcities links)]
 
 connectionL :: [City] -> [Link] -> [Link]
-connectionL cities links = [link | cityA <- cities, cityB <- cities, cityA /= cityB , link <- links, linksL cityA cityB link]
+connectionL cities links = eliminarRepetidos [link | cityA <- cities, cityB <- cities, cityA /= cityB , link <- links, linksL cityA cityB link]
 --no se si esta función me va a repetir los links.
+
+eliminarRepetidos :: [Link] -> [Link]
+eliminarRepetidos [] = []
+eliminarRepetidos (x:xs) = [x | y <- xs, x /= y]
 
 connectedR :: Region -> City -> City -> Bool -- indica si estas dos ciudades estan conectadas por un tunel
 connectedR (Reg _ _ tuneles) cityA cityB = not (null ([tunel | tunel <- tuneles,connectsT cityA cityB tunel]))
