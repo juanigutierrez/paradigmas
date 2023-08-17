@@ -49,7 +49,6 @@ tunnel3 = newT [linkBC]
 -- Obtener demora máxima en el túnel
     --maxTunnelDelay = delayT tunnel
 
-region1 = newR
 -- Agregar una nueva ciudad a la región
     --newRegion = foundR initialRegion cityC
 -- Enlazar dos ciudades en la región con un enlace de calidad
