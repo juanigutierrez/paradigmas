@@ -39,7 +39,7 @@ linkBC = newL cityB cityC quality2
 tunnel1 = newT [linkAB, linkBC]
 tunnel2 = newT [linkBC, linkBA]
 tunnel3 = newT [linkBC]
-
+r= newR
 -- Verificar si dos ciudades están conectadas por el túnel
     --areConnected = connectsT cityA cityB tunnel
 
@@ -49,7 +49,7 @@ tunnel3 = newT [linkBC]
 -- Obtener demora máxima en el túnel
     --maxTunnelDelay = delayT tunnel
 
-region1= newR [cityA,cityB] [linkAB,linkBA] [tunnel1]
+
 -- Agregar una nueva ciudad a la región
     --newRegion = foundR initialRegion cityC
 -- Enlazar dos ciudades en la región con un enlace de calidad

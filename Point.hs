@@ -1,6 +1,6 @@
 module Point ( Point, newP, difP)
    where
-import System.Win32 (xBUTTON1)
+
 
 data Point = Poi Int Int deriving (Eq, Show)
 
