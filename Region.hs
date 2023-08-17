@@ -18,15 +18,15 @@ foundR (Reg citys links tunnels) city | city `elem` citys = error "la ciudad ya 
 
 linkR :: Region -> City -> City -> Quality -> Region -- enlaza dos ciudades de la región con un enlace de la calidad indicada.
 linkR (Reg citys links tunnels) cityA cityB quality
-   | not (null ([link | link<-links, linksL cityA cityB link]))  =  error "No puede ingresar el mismo Link"
    | notElem cityA citys || notElem cityB citys = error "No se puede generear el link, una de las dos ciudades no pertenece a la region."
+   | not (null ([link | link<-links, linksL cityA cityB link]))  =  error "No puede ingresar el mismo Link"
    | otherwise = Reg citys ((newL cityA cityB quality):links) tunnels
 
 tunelR :: Region -> [ City ] -> Region -- genera una comunicación entre dos ciudades distintas de la región
 --acá tengo que ver:
    --lista de ciudades ingresadas debe ser parte de la región.
    --las ciudades que se desean conectar deben tener links ya ingresados.
-   --
+   --tengo que ver que no se puedan meter links en mas tuneles que su capacidad permitida.
 tunelR (Reg cities links tunnels) tunelcities
    | not (all (`elem` tunelcities) cities) = error "Una ciudad ingresada no forma parte de la region."
    | length (connectionL tunelcities links) < (length tunelcities - 1) = error "No hay suficientes links en la región para conectar las ciudades."
@@ -35,6 +35,7 @@ tunelR (Reg cities links tunnels) tunelcities
 connectionL :: [City] -> [Link] -> [Link]
 connectionL cities links = [link | cityA <- cities, cityB <- cities, cityA /= cityB , link <- links, linksL cityA cityB link]
 --no se si esta función me va a repetir los links.
+--revisar/preguntar largo de la función.
 
 connectedR :: Region -> City -> City -> Bool -- indica si estas dos ciudades estan conectadas por un tunel
 connectedR (Reg _ _ tuneles) cityA cityB = not (null ([tunel | tunel <- tuneles,connectsT cityA cityB tunel]))
