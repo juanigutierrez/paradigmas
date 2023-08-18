@@ -12,14 +12,14 @@ newR :: Region
 newR = Reg [] [] []
 
 foundR :: Region -> City -> Region -- agrega una nueva ciudad a la región
-foundR (Reg citys links tunnels) city | city `elem` citys = error "la ciudad ya se encuentra en la region"
-                                      | otherwise = Reg (city:citys) links tunnels
+foundR (Reg cities links tunnels) city | city `elem` cities = error "la ciudad ya se encuentra en la region"
+                                      | otherwise = Reg (city:cities) links tunnels
 
 linkR :: Region -> City -> City -> Quality -> Region -- enlaza dos ciudades de la región con un enlace de la calidad indicada.
-linkR (Reg citys links tunnels) cityA cityB quality
-   | notElem cityA citys || notElem cityB citys = error "No se puede generear el link, una de las dos ciudades no pertenece a la region."
+linkR (Reg cities links tunnels) cityA cityB quality
+   | notElem cityA cities || notElem cityB cities = error "No se puede generear el link, una de las dos ciudades no pertenece a la region."
    | not (null ([link | link<-links, linksL cityA cityB link]))  =  error "No puede ingresar el mismo Link"
-   | otherwise = Reg citys ((newL cityA cityB quality):links) tunnels
+   | otherwise = Reg cities ((newL cityA cityB quality):links) tunnels
 
 tunelR :: Region -> [ City ] -> Region -- genera una comunicación entre dos ciudades distintas de la región
 --acá tengo que ver:
@@ -47,9 +47,10 @@ linkedR :: Region -> City -> City -> Bool -- indica si estas dos ciudades estan 
 linkedR (Reg _ links _) cityA cityB = not (null ([link | link <- links, linksL cityA cityB link]))
 
 delayR :: Region -> City -> City -> Float -- dadas dos ciudades conectadas, indica la demora.
-delayR (Reg citys links tuneles) cityA cityB | connectedR (Reg citys links tuneles) cityA cityB  = foldr (+) 0 [delayL link | link <- links, linksL cityA cityB link]
+delayR (Reg cities links tuneles) cityA cityB | connectedR (Reg cities links tuneles) cityA cityB  = foldr (+) 0 [delayL link | link <- links, linksL cityA cityB link]
                                              | otherwise = error "las ciudades no se encuentran conectadas"
 
 availableCapacityForR :: Region -> City -> City -> Int -- indica la capacidad disponible entre dos ciudades-}
-availableCapacityForR (Reg citys links tuneles) cityA cityB | linkedR  (Reg citys links tuneles) cityA cityB = capacityL (head [link | link <- links, linksL cityA cityB link])
-                                                            | otherwise= error "no existe una link que los conecte"
+availableCapacityForR r@(Reg cities links tuneles) cityA cityB 
+   | linkedR  r cityA cityB = capacityL (head [link | link <- links, linksL cityA cityB link])
+   | otherwise= error "no existe una link que los conecte"
