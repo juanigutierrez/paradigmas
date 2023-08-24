@@ -3,12 +3,13 @@ import Point
 import Quality
 import Link
 import Tunel
-
 import Region
+
 -- Crear ciudades
 cityA = newC "City A" (newP 1 1)
 cityB = newC "City B" (newP 2 2)
 cityC = newC "City C" (newP 3 3)
+cityD = newC "City D" (newP 4 4)
 
 -- Obtener nombre de ciudad
     --name = nameC cityA
@@ -18,6 +19,7 @@ cityC = newC "City C" (newP 3 3)
 -- Crear calidad
 quality1 = newQ "Type 1" 5 1.0
 quality2 = newQ "Type 2" 3 2.2
+quality3 = newQ "Type 3" 4 1.0
 
 -- Obtener capacidad y demora de calidad
     --capacity = capacityQ quality1
@@ -27,6 +29,12 @@ quality2 = newQ "Type 2" 3 2.2
 linkAB = newL cityA cityB quality1
 linkBA = newL cityB cityA quality2
 linkBC = newL cityB cityC quality2
+linkCD = newL cityC cityD quality3
+
+tunnelcities = [cityA,cityB,cityC,cityD]
+tunnellinks = [linkAB,linkBC,linkCD]
+tunnellinks2 = [linkAB,linkCD,linkBC]
+
 
 -- Verificar si una ciudad está en el enlace
     --isConnectedA = connectsL cityA linkAB
@@ -52,7 +60,6 @@ tunnel3 = newT [linkBC]
 -- Agregar una nueva ciudad a la región
     --newRegion = foundR initialRegion cityC
 -- Enlazar dos ciudades en la región con un enlace de calidad
-quality3 = newQ "Type 3" 4 1.0
     --linkedRegion = linkR newRegion cityA cityC quality3
 
 -- Verificar si dos ciudades están conectadas por un túnel en la región

@@ -9,7 +9,10 @@ newT :: [Link] -> Tunel
 newT links = Tun links
 
 connectsT :: City -> City -> Tunel -> Bool -- inidca si este tunel conecta estas dos ciudades distintas
-connectsT city1 city2 (Tun links)= length [x | x <- links, linksL city1 city2 x] >= 1
+connectsT cityA cityB (Tun links) = (cityLinkCount cityA links ==1) && (cityLinkCount cityB links==1)
+
+cityLinkCount :: City -> [Link] -> Int
+cityLinkCount city links= length [link | link <- links, connectsL city link]
 
 usesT :: Link -> Tunel -> Bool  -- indica si este tunel atraviesa ese link
 usesT link (Tun links) = length [x | x<-links, link == x] == 1

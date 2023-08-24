@@ -26,19 +26,26 @@ tunelR :: Region -> [ City ] -> Region -- genera una comunicación entre dos ciu
    --lista de ciudades ingresadas debe ser parte de la región.
    --las ciudades que se desean conectar deben tener links ya ingresados.
    --tengo que ver que no se puedan meter links en mas tuneles que su capacidad permitida.
-   
-tunelR (Reg cities links tunnels) tunelcities
-   | not (all (`elem` tunelcities) cities) = error "Una ciudad ingresada no forma parte de la region."
-   | length (connectionL tunelcities links) < (length tunelcities - 1) = error "No hay suficientes links en la región para conectar las ciudades."
-   | otherwise = Reg cities links [newT (connectionL tunelcities links)]
+tunelR region@(Reg cities links tunel) tcities 
+    |not (all (`elem` cities) tcities) = error "Una ciudad ingresada no forma parte de la region." -- no anda. solo funciona cunado le metemos todas las ciudades.
+    |not (validlinkquantity region tcities) = error "No hay links suficientes para crear el tunel"
+    |not (validLinks region linklist) = error "La capacidad de algún link fué exedida."
+    |otherwise= Reg cities links ((newT linklist):tunel)
+    where
+      linklist = create_lista links tcities
 
-connectionL :: [City] -> [Link] -> [Link]
-connectionL cities links = eliminarRepetidos [link | cityA <- cities, cityB <- cities, cityA /= cityB , link <- links, linksL cityA cityB link]
---no se si esta función me va a repetir los links.
+validlinkquantity :: Region -> [City] -> Bool
+validlinkquantity (Reg _ links tunels) citys = (length (create_lista links citys)) == (length (citys)-1)
+--te dice true si se puede crear el tunel o false si no
 
-eliminarRepetidos :: [Link] -> [Link]
-eliminarRepetidos [] = []
-eliminarRepetidos (x:xs) = [x | y <- xs, x /= y]
+create_lista :: [Link]->[City]->[Link]
+create_lista links []=[]
+create_lista links [_]=[]
+create_lista links (x:xs:citys) = [link |link <- links,linksL x xs link] ++ create_lista links (xs:citys)
+
+validLinks :: Region -> [Link] -> Bool
+validLinks (Reg _ _ []) _ = True
+validLinks region tlinks = (length ([link | link<-tlinks, tunnel_count region link < capacityL link])) == (length tlinks)
 
 connectedR :: Region -> City -> City -> Bool -- indica si estas dos ciudades estan conectadas por un tunel
 connectedR (Reg _ _ tuneles) cityA cityB = not (null ([tunel | tunel <- tuneles,connectsT cityA cityB tunel]))
@@ -47,10 +54,16 @@ linkedR :: Region -> City -> City -> Bool -- indica si estas dos ciudades estan 
 linkedR (Reg _ links _) cityA cityB = not (null ([link | link <- links, linksL cityA cityB link]))
 
 delayR :: Region -> City -> City -> Float -- dadas dos ciudades conectadas, indica la demora.
-delayR (Reg cities links tuneles) cityA cityB | connectedR (Reg cities links tuneles) cityA cityB  = foldr (+) 0 [delayL link | link <- links, linksL cityA cityB link]
-                                             | otherwise = error "las ciudades no se encuentran conectadas"
+delayR (Reg cities links tuneles) cityA cityB 
+   | connectedR (Reg cities links tuneles) cityA cityB  = foldr (+) 0 [delayL link | link <- links, linksL cityA cityB link]--da siempre 0
+   | otherwise = error "las ciudades no se encuentran conectadas"
+                           
+availableCapacityForR :: Region -> City -> City -> Int -- indica la capacidad disponible entre dos ciudades
+availableCapacityForR region@(Reg _ links _) cityA cityB 
+   |linkage  == [] = error "Las ciudades no estan conectadas." -- ERROR solo conectadas mediante tunel, vinculadas mediante link.
+   |otherwise = capacityL (head linkage) - tunnel_count region (head linkage)
+   where
+      linkage = [link | link <- links, linksL cityA cityB link]
 
-availableCapacityForR :: Region -> City -> City -> Int -- indica la capacidad disponible entre dos ciudades-}
-availableCapacityForR r@(Reg cities links tuneles) cityA cityB 
-   | linkedR  r cityA cityB = capacityL (head [link | link <- links, linksL cityA cityB link])
-   | otherwise= error "no existe una link que los conecte"
+tunnel_count :: Region -> Link -> Int --ELIMINAR: indica cuantas veces un link se encuentra en la lista de túneles.
+tunnel_count (Reg _ _ tunnels) link = length ([tunel | tunel <- tunnels, usesT link tunel])
