@@ -14,11 +14,11 @@ newR = Reg [] [] []
 foundR :: Region -> City -> Region -- agrega una nueva ciudad a la región
 foundR (Reg cities links tunnels) city 
    | city `elem` cities = error "la ciudad ya se encuentra en la region" --Preguntar a julio si es necesario.
-   | not (citypositionisvalid cities city) = "La ubicación de la ciudad ingresada esta ocupada"
+   | not (citypositionisvalid cities city) = error "La ubicación de la ciudad ingresada esta ocupada"
    | otherwise = Reg (city:cities) links tunnels
 
 citypositionisvalid :: [City] -> City -> Bool
-citypositionisvalid [cities] newcity = lenght [city | city <-cities, distanceC city newcity == 0] == 0
+citypositionisvalid cities newcity = length [city | city <-cities, distanceC city newcity == 0] == 0
 
 linkR :: Region -> City -> City -> Quality -> Region -- enlaza dos ciudades de la región con un enlace de la calidad indicada.
 linkR (Reg cities links tunnels) cityA cityB quality
@@ -31,6 +31,8 @@ tunelR :: Region -> [ City ] -> Region -- genera una comunicación entre dos ciu
    --lista de ciudades ingresadas debe ser parte de la región.
    --las ciudades que se desean conectar deben tener links ya ingresados.
    --tengo que ver que no se puedan meter links en mas tuneles que su capacidad permitida.
+   --Pueden haber dos tuneles que conecten las mismas ciudades? 
+      --En caso de que si, ¿Puede ser la misma LISTA de ciudades?
 tunelR region@(Reg cities links tunel) tcities 
     |not (all (`elem` cities) tcities) = error "Una ciudad ingresada no forma parte de la region." -- no anda. solo funciona cunado le metemos todas las ciudades.
     |not (validlinkquantity region tcities) = error "No hay links suficientes para crear el tunel"
@@ -40,13 +42,13 @@ tunelR region@(Reg cities links tunel) tcities
       linklist = connectcities links tcities
 
 validlinkquantity :: Region -> [City] -> Bool
-validlinkquantity (Reg _ links tunels) citys = (length (create_lista links citys)) == (length (citys)-1)
+validlinkquantity (Reg _ links tunels) citys = (length (connectcities links citys)) == (length (citys)-1)
 --te dice true si se puede crear el tunel o false si no
 
 connectcities :: [Link]->[City]->[Link]
 connectcities links []=[]
 connectcities links [_]=[]
-connectcities links (x:xs:citys) = [link |link <- links,linksL x xs link] ++ create_lista links (xs:citys)
+connectcities links (x:xs:citys) = [link |link <- links,linksL x xs link] ++ connectcities links (xs:citys)
 
 validLinks :: Region -> [Link] -> Bool
 validLinks (Reg _ _ []) _ = True
@@ -60,7 +62,7 @@ linkedR (Reg _ links _) cityA cityB = not (null ([link | link <- links, linksL c
 
 delayR :: Region -> City -> City -> Float -- dadas dos ciudades conectadas, indica la demora.
 delayR (Reg cities links tuneles) cityA cityB 
-   | connectedR (Reg cities links tuneles) cityA cityB  = foldr (+) 0 [delayL link | link <- links, linksL cityA cityB link]--da siempre 0
+   | connectedR (Reg cities links tuneles) cityA cityB  = head [delayT tunel | tunel <- tuneles, connectsT cityA cityB tunel] --da siempre 0
    | otherwise = error "las ciudades no se encuentran conectadas"
                            
 availableCapacityForR :: Region -> City -> City -> Int -- indica la capacidad disponible entre dos ciudades
