@@ -1,5 +1,5 @@
 --ELIMINAR UBI DEL PARENTESIS MODULE
-module City ( City, newC, nameC, distanceC, ubi)
+module City ( City, newC, nameC, distanceC)
    where
 
 import Point 
@@ -7,6 +7,7 @@ import Point
 data City = Cit String Point deriving (Eq, Show)
 
 newC :: String -> Point -> City
+newC "" point = error "La ciudad no puede tener nombre vacío."
 newC name point = Cit name point
 
 nameC :: City -> String

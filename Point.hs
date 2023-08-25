@@ -13,4 +13,4 @@ cory::Point-> Float
 cory (Poi _ y) = fromIntegral(y)
 
 difP :: Point -> Point -> Float  -- distancia absoluta
-difP point1 point2 = sqrt((((corx point1) - (cory point2)))^2) + (((cory point1) - (cory point2))^2)
+difP point1 point2 = sqrt( (  (corx point1) - (corx point2) )^2 + ( (cory point1) - (cory point2) )^2  )

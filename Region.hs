@@ -13,8 +13,7 @@ newR = Reg [] [] []
 
 foundR :: Region -> City -> Region -- agrega una nueva ciudad a la región
 foundR (Reg cities links tunnels) city 
-   | city `elem` cities = error "la ciudad ya se encuentra en la region" --Preguntar a julio si es necesario.
-   | not (citypositionisvalid cities city) = error "La ubicación de la ciudad ingresada esta ocupada"
+   | not (citypositionisvalid cities city) = error "Ya hay una ciudad en esa ubicación."
    | otherwise = Reg (city:cities) links tunnels
 
 citypositionisvalid :: [City] -> City -> Bool
@@ -62,7 +61,7 @@ linkedR (Reg _ links _) cityA cityB = not (null ([link | link <- links, linksL c
 
 delayR :: Region -> City -> City -> Float -- dadas dos ciudades conectadas, indica la demora.
 delayR (Reg cities links tuneles) cityA cityB 
-   | connectedR (Reg cities links tuneles) cityA cityB  = head [delayT tunel | tunel <- tuneles, connectsT cityA cityB tunel] --da siempre 0
+   | connectedR (Reg cities links tuneles) cityA cityB  = head [delayT tunel | tunel <- tuneles, connectsT cityA cityB tunel]
    | otherwise = error "las ciudades no se encuentran conectadas"
                            
 availableCapacityForR :: Region -> City -> City -> Int -- indica la capacidad disponible entre dos ciudades

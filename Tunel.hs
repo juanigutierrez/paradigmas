@@ -9,7 +9,9 @@ newT :: [Link] -> Tunel
 newT links = Tun links
 
 connectsT :: City -> City -> Tunel -> Bool -- inidca si este tunel conecta estas dos ciudades distintas
-connectsT cityA cityB (Tun links) = (cityLinkCount cityA links ==1) && (cityLinkCount cityB links==1)
+connectsT cityA cityB (Tun links) 
+   | cityA == cityB = error "Ha ingresado la misma ciudad dos veces."
+   | otherwise = (cityLinkCount cityA links == 1) && (cityLinkCount cityB links == 1)
 
 cityLinkCount :: City -> [Link] -> Int
 cityLinkCount city links= length [link | link <- links, connectsL city link]

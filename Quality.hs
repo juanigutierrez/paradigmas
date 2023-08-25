@@ -4,7 +4,11 @@ module Quality ( Quality, newQ, capacityQ, delayQ )
 data Quality = Qua String Int Float deriving (Eq, Show)
 
 newQ :: String -> Int -> Float -> Quality
-newQ  kind qty dly = Qua kind qty dly --kind=tipo qty=calidad dly=delay(demora) DLTCOM
+newQ name capacity delay
+   |name == "" = error "El nombre de Quality no puede ser vacio."
+   |capacity < 0 = error "la calidad no puede ser menor a 0"
+   |delay < 0 = error "el delay no puede ser menor a 0"
+   |otherwise = Qua name capacity delay
 
 capacityQ :: Quality -> Int -- cuantos túneles puede tolerar esta conexión
 capacityQ (Qua _ qty _) = qty
