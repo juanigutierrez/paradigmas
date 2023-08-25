@@ -12,8 +12,13 @@ newR :: Region
 newR = Reg [] [] []
 
 foundR :: Region -> City -> Region -- agrega una nueva ciudad a la región
-foundR (Reg cities links tunnels) city | city `elem` cities = error "la ciudad ya se encuentra en la region"
-                                      | otherwise = Reg (city:cities) links tunnels
+foundR (Reg cities links tunnels) city 
+   | city `elem` cities = error "la ciudad ya se encuentra en la region" --Preguntar a julio si es necesario.
+   | not (citypositionisvalid cities city) = "La ubicación de la ciudad ingresada esta ocupada"
+   | otherwise = Reg (city:cities) links tunnels
+
+citypositionisvalid :: [City] -> City -> Bool
+citypositionisvalid [cities] newcity = lenght [city | city <-cities, distanceC city newcity == 0] == 0
 
 linkR :: Region -> City -> City -> Quality -> Region -- enlaza dos ciudades de la región con un enlace de la calidad indicada.
 linkR (Reg cities links tunnels) cityA cityB quality
@@ -32,16 +37,16 @@ tunelR region@(Reg cities links tunel) tcities
     |not (validLinks region linklist) = error "La capacidad de algún link fué exedida."
     |otherwise= Reg cities links ((newT linklist):tunel)
     where
-      linklist = create_lista links tcities
+      linklist = connectcities links tcities
 
 validlinkquantity :: Region -> [City] -> Bool
 validlinkquantity (Reg _ links tunels) citys = (length (create_lista links citys)) == (length (citys)-1)
 --te dice true si se puede crear el tunel o false si no
 
-create_lista :: [Link]->[City]->[Link]
-create_lista links []=[]
-create_lista links [_]=[]
-create_lista links (x:xs:citys) = [link |link <- links,linksL x xs link] ++ create_lista links (xs:citys)
+connectcities :: [Link]->[City]->[Link]
+connectcities links []=[]
+connectcities links [_]=[]
+connectcities links (x:xs:citys) = [link |link <- links,linksL x xs link] ++ create_lista links (xs:citys)
 
 validLinks :: Region -> [Link] -> Bool
 validLinks (Reg _ _ []) _ = True
