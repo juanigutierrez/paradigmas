@@ -1,4 +1,3 @@
---ELIMINAR UBI DEL PARENTESIS MODULE
 module City ( City, newC, nameC, distanceC)
    where
 

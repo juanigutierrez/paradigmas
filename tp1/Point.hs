@@ -8,7 +8,7 @@ newP :: Int -> Int -> Point
 newP x y = Poi x y
 
 corx :: Point -> Float
-corx (Poi x _) = fromIntegral(x)--PREGUNTA: ¿Es mejor poner fromIntegral directamente en sqrt o acá?
+corx (Poi x _) = fromIntegral(x)
 cory::Point-> Float
 cory (Poi _ y) = fromIntegral(y)
 

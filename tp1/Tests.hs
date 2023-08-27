@@ -30,7 +30,7 @@ notCity = newC "" point1
 
 testCity = [nameC cityA == "CityA",
             distanceC cityA cityB == sqrt 2,
-            testF (notCity)] -- Da un error al intentar crear una ciudad de nombre vacío 
+            testF notCity] -- Da un error al intentar crear una ciudad de nombre vacío 
 
 
 ------------- TEST DE QUALITY -------------
@@ -56,8 +56,8 @@ linkBC = newL cityB cityC quality2
 linkCD = newL cityC cityD quality3
 notLink = newL cityA cityA quality1
 
-testLink = [connectsL cityA linkAB == True , 
-            linksL cityB cityC linkBC == True ,
+testLink = [connectsL cityA linkAB , 
+            linksL cityB cityC linkBC ,
             capacityL linkAB == 1 , 
             delayL linkBC == sqrt 2 * 2.2,
             testF  notLink , -- Da un error al intentar crear un link entre la misma ciudad.
@@ -67,8 +67,8 @@ testLink = [connectsL cityA linkAB == True ,
 
 tunnelAD = newT [linkAB,linkBC,linkCD]
 
-testTunel = [connectsT cityA cityD tunnelAD == True , 
-             usesT linkBC tunnelAD == True , 
+testTunel = [connectsT cityA cityD tunnelAD , 
+             usesT linkBC tunnelAD , 
              delayT tunnelAD == delayL linkAB + delayL linkBC + delayL linkCD,
              testF (connectsT cityA cityA tunnelAD)] --Da un error al intentar verificar la conexión de un tunel entre la misma ciudad.
 
@@ -92,27 +92,21 @@ notRegion2 = linkR region8 cityA cityF quality1
 
 region9 = tunelR region8 [cityA,cityB,cityC,cityD]
 
-notRegion3 = tunelR region9 [cityA,cityB,cityC,cityD,cityF] --capta que la ciudad f no esta en la region
-notRegion4 = tunelR region9 [cityA,cityB,cityC,cityD,cityE] --capta que no existen links que hagan posible este tunel
-notRegion5 = tunelR region9 [cityB,cityC,cityD] -- capta que la capacidad de un link fue exedida 
+notRegion3 = tunelR region9 [cityA,cityB,cityC,cityD,cityF]
+notRegion4 = tunelR region9 [cityA,cityB,cityC,cityD,cityE]
+notRegion5 = tunelR region9 [cityA,cityB,cityC]
 
---LEEERR (HACER ALGUNA CAPACIDAD DE ESOS 3 ULTIMOS IGUAL A 1)
---los que tienen distintos es porque nose como probar que se añadio un link o ciudad o tunel , yo los sacaria.
---LOS QUE DICEN == ERROR ES DONDE HAY QUE HACER TESTF
---LOS QUE TIENEN NUMEROS HAY QUE CAMBIARLOS POR LOS POSTA
---hay que hacerlo prolijo
---eliminar cada comentario una vez resuelto el problema
-
-testRegion = [region /= region1 ,
+testRegion = [region /= region1 , --verifica el funcionamiento de foundR, se ha agregado una ciudad.
               testF notRegion , --Da un error al intentar fundar dos veces la misma ciudad.
-              region6 /= region7 ,
+              region6 /= region7 , --verifica el funcionamiento de linkR, se ha agregado un link.
               testF  notRegion1 , --Da un error al intentar agregar un link ya creado.
               testF notRegion2 , --Da un error al intentar agregar un link con una ciudad que no esta en la región.
-              region8 /= region9 ,
+              region8 /= region9 , --verifica el funcionamiento de TunnelR, se ha agregado un tunel.
               testF notRegion3 , --Da un error cuando una ciudad no esta en la región.
               testF notRegion4 , --Da un error cuando no exiten links posibles para conectar las ciudades del tunnel.
-              connectedR region9 cityA cityD == True ,
-              linkedR region9 cityA cityB == True ,
+              testF notRegion5 , --Da un error cuando la capacidad de un link fue exedida.
+              connectedR region9 cityA cityD ,
+              linkedR region9 cityA cityB ,
               testF (delayR region9 cityA cityC), --Da error cuando se intenta buscar un delay entre dos ciudades no conectadas.
               delayR region9 cityA cityD == delayL linkAB + delayL linkBC + delayL linkCD ,
               testF (availableCapacityForR region9 cityA cityC) , --Da error cuando se intenta buscar la capacidad disponible entre dos ciudades no conectadas.

@@ -1,6 +1,3 @@
---SOLUCIONAR:
-    --NO SEDEBERÍA PODER HACER UNA CONEXIÓN ENTRE LA MISMA CIUDAD
-
 module Link ( Link, newL, linksL, connectsL, capacityL, delayL)
    where
 
